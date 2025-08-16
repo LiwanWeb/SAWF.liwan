@@ -607,26 +607,7 @@
   </div>
     <canvas id="canvas"></canvas>
 </div>
-<script>
-  window.addEventListener("load", function() {
-    // نتحقق إذا عملنا ريفرش من قبل
-    let refreshCount = sessionStorage.getItem("refreshCount") || 0;
-    refreshCount = parseInt(refreshCount);
 
-    if (refreshCount < 1) { 
-      // نزيد العداد
-      sessionStorage.setItem("refreshCount", refreshCount + 1);
-
-      // نسوي ريفرش
-      setTimeout(() => {
-        location.reload();
-      }, 2000);
-    } else {
-      // بعد ما يخلص مرتين، نوقف ونصفر العداد
-      sessionStorage.removeItem("refreshCount");
-    }
-  });
-</script>
 
 
 <script>
@@ -822,10 +803,31 @@ document.getElementById('color1').addEventListener('change', function() {
     }
   }
   </script>
-  
+
+  <script>
+  window.addEventListener("load", function() {
+    // نتحقق إذا عملنا ريفرش من قبل
+    let refreshCount = sessionStorage.getItem("refreshCount") || 0;
+    refreshCount = parseInt(refreshCount);
+
+    if (refreshCount < 1) { 
+      // نزيد العداد
+      sessionStorage.setItem("refreshCount", refreshCount + 1);
+
+      // نسوي ريفرش
+      setTimeout(() => {
+        location.reload();
+      }, 2000);
+    } else {
+      // بعد ما يخلص مرتين، نوقف ونصفر العداد
+      sessionStorage.removeItem("refreshCount");
+    }
+  });
+</script>
  
   
 
 </body>
 </html>
+
 
