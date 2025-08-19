@@ -607,26 +607,7 @@
   </div>
     <canvas id="canvas"></canvas>
 </div>
-<script>
-  window.addEventListener("load", function() {
-    // نتحقق إذا عملنا ريفرش من قبل
-    let refreshCount = sessionStorage.getItem("refreshCount") || 0;
-    refreshCount = parseInt(refreshCount);
 
-    if (refreshCount < 1) { 
-      // نزيد العداد
-      sessionStorage.setItem("refreshCount", refreshCount + 1);
-
-      // نسوي ريفرش
-      setTimeout(() => {
-        location.reload();
-      }, 1500);
-    } else {
-      // بعد ما يخلص مرتين، نوقف ونصفر العداد
-      sessionStorage.removeItem("refreshCount");
-    }
-  });
-</script>
 
 
 <script>
@@ -694,6 +675,11 @@ document.getElementById('color1').addEventListener('change', function() {
       tempCanvas2.height = canvas.height;
       let tempCtx2 = tempCanvas2.getContext('2d');
       tempCtx2.drawImage(imgB, 0, 0, canvas.width, canvas.height);
+
+      tempCtx2.drawImage(imgB, 0, 0, imgB.width, imgB.height);
+canvas.width = Math.max(img1.width, imgB.width);
+canvas.height = Math.max(img1.height, imgB.height);
+
       originalPixels2 = tempCtx2.getImageData(0, 0, canvas.width, canvas.height);
       tintedPixels2 = originalPixels2;
       img2 = imgB;
