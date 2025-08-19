@@ -431,18 +431,16 @@
   <header>
     <div class="logo">    
       <a href="#"  onclick="location.reload();" target="_self">
-          <img src="logo.png" alt="لـيــوان" style="height:90px; vertical-align:middle;">
+        <img src="logo.png" alt="لـيــوان" style="height:90px; vertical-align:middle;">
       </a>
   </div>
   
     <div class="search-box">
         
     </div>
-<nav>
-      <button class="btn" type="button"
-      onclick="window.location.href='https://liwanweb.github.io/'">
-الرجوع
-</button>  </nav>
+    <nav>
+      <button class="btn" onclick="history.back()">رجوع</button>
+  </nav>
   
 </header>
 
@@ -609,7 +607,26 @@
   </div>
     <canvas id="canvas"></canvas>
 </div>
+<script>
+  window.addEventListener("load", function() {
+    // نتحقق إذا عملنا ريفرش من قبل
+    let refreshCount = sessionStorage.getItem("refreshCount") || 0;
+    refreshCount = parseInt(refreshCount);
 
+    if (refreshCount < 1) { 
+      // نزيد العداد
+      sessionStorage.setItem("refreshCount", refreshCount + 1);
+
+      // نسوي ريفرش
+      setTimeout(() => {
+        location.reload();
+      }, 1500);
+    } else {
+      // بعد ما يخلص مرتين، نوقف ونصفر العداد
+      sessionStorage.removeItem("refreshCount");
+    }
+  });
+</script>
 
 
 <script>
@@ -805,33 +822,9 @@ document.getElementById('color1').addEventListener('change', function() {
     }
   }
   </script>
-
-  <script>
-  window.addEventListener("load", function() {
-    // نتحقق إذا عملنا ريفرش من قبل
-    let refreshCount = sessionStorage.getItem("refreshCount") || 0;
-    refreshCount = parseInt(refreshCount);
-
-    if (refreshCount < 1) { 
-      // نزيد العداد
-      sessionStorage.setItem("refreshCount", refreshCount + 1);
-
-      // نسوي ريفرش
-      setTimeout(() => {
-        location.reload();
-      }, 2000);
-    } else {
-      // بعد ما يخلص مرتين، نوقف ونصفر العداد
-      sessionStorage.removeItem("refreshCount");
-    }
-  });
-</script>
+  
  
   
 
 </body>
 </html>
-
-
-
-
