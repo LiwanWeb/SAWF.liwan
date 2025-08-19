@@ -640,7 +640,6 @@ document.getElementById('color1').addEventListener('change', function() {
     }, 2000);
   });
 </script>
-
 <script>
   let swapState = false; // حالة التبديل
   
@@ -649,40 +648,20 @@ document.getElementById('color1').addEventListener('change', function() {
   let img1 = null, img2 = null;
   let originalPixels1 = null, originalPixels2 = null;
   let tintedPixels1 = null, tintedPixels2 = null;
-  
+
   // تحميل الصور بدون تلوين
   window.addEventListener('load', () => {
-    let imgA = new Image();
-    imgA.onload = () => {
-      canvas.width = imgA.width;
-      canvas.height = imgA.height;
-      let tempCanvas1 = document.createElement('canvas');
-      tempCanvas1.width = imgA.width;
-      tempCanvas1.height = imgA.height;
-      let tempCtx1 = tempCanvas1.getContext('2d');
-      tempCtx1.drawImage(imgA, 0, 0);
-      originalPixels1 = tempCtx1.getImageData(0, 0, imgA.width, imgA.height);
-      tintedPixels1 = originalPixels1; 
+    loadImage('وو.png', (imgA) => {
       img1 = imgA;
       renderFinal(); // اعرض الأصل فقط
-    };
-    imgA.src = 'وو.png';
-  
-    let imgB = new Image();
-    imgB.onload = () => {
-      let tempCanvas2 = document.createElement('canvas');
-      tempCanvas2.width = canvas.width;
-      tempCanvas2.height = canvas.height;
-      let tempCtx2 = tempCanvas2.getContext('2d');
-      tempCtx2.drawImage(imgB, 0, 0, canvas.width, canvas.height);
-      originalPixels2 = tempCtx2.getImageData(0, 0, canvas.width, canvas.height);
-      tintedPixels2 = originalPixels2;
+    });
+    loadImage('66.png', (imgB) => {
       img2 = imgB;
       renderFinal(); // اعرض الأصل فقط
-    };
-    imgB.src = '66.png';
+    });
   });
-   // رفع صورة جديدة بدل الافتراضية
+
+  // رفع صورة جديدة بدل الافتراضية
   document.getElementById('upload1').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -690,17 +669,8 @@ document.getElementById('color1').addEventListener('change', function() {
     reader.onload = function(ev) {
       let imgA = new Image();
       imgA.onload = () => {
-        canvas.width = imgA.width;
-        canvas.height = imgA.height;
-        let tempCanvas1 = document.createElement('canvas');
-        tempCanvas1.width = imgA.width;
-        tempCanvas1.height = imgA.height;
-        let tempCtx1 = tempCanvas1.getContext('2d');
-        tempCtx1.drawImage(imgA, 0, 0);
-        originalPixels1 = tempCtx1.getImageData(0, 0, imgA.width, imgA.height);
-        tintedPixels1 = originalPixels1;
         img1 = imgA;
-        renderFinal();
+        renderFinal(); // اعرض الصورة الجديدة
       };
       imgA.src = ev.target.result;
     };
@@ -714,21 +684,37 @@ document.getElementById('color1').addEventListener('change', function() {
     reader.onload = function(ev) {
       let imgB = new Image();
       imgB.onload = () => {
-        let tempCanvas2 = document.createElement('canvas');
-        tempCanvas2.width = canvas.width;
-        tempCanvas2.height = canvas.height;
-        let tempCtx2 = tempCanvas2.getContext('2d');
-        tempCtx2.drawImage(imgB, 0, 0, canvas.width, canvas.height);
-        originalPixels2 = tempCtx2.getImageData(0, 0, canvas.width, canvas.height);
-        tintedPixels2 = originalPixels2;
         img2 = imgB;
-        renderFinal();
+        renderFinal(); // اعرض الصورة الجديدة
       };
       imgB.src = ev.target.result;
     };
     reader.readAsDataURL(file);
   });
- 
+
+  // دالة لتحميل الصورة
+  function loadImage(src, callback) {
+    let img = new Image();
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      let tempCanvas = document.createElement('canvas');
+      tempCanvas.width = img.width;
+      tempCanvas.height = img.height;
+      let tempCtx = tempCanvas.getContext('2d');
+      tempCtx.drawImage(img, 0, 0);
+      if (src === 'وو.png') {
+        originalPixels1 = tempCtx.getImageData(0, 0, img.width, img.height);
+        tintedPixels1 = originalPixels1;
+      } else if (src === '66.png') {
+        originalPixels2 = tempCtx.getImageData(0, 0, img.width, img.height);
+        tintedPixels2 = originalPixels2;
+      }
+      callback(img); // استدعاء الكولباك بعد تحميل الصورة
+    };
+    img.src = src;
+  }
+
   // زر تطبيق الألوان
   function applyTints() {
     applyTint1();
@@ -742,7 +728,7 @@ document.getElementById('color1').addEventListener('change', function() {
     const num = parseInt(hex, 16);
     return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
   }
-  
+
   function applyTint1() {
     if (!originalPixels1) return;
     const tint = swapState
@@ -762,7 +748,7 @@ document.getElementById('color1').addEventListener('change', function() {
     tintedPixels1 = out;
     renderFinal();
   }
-  
+
   function applyTint2() {
     if (!originalPixels2) return;
     const tint = swapState
@@ -784,7 +770,7 @@ document.getElementById('color1').addEventListener('change', function() {
     tintedPixels2 = out;
     renderFinal();
   }
-  
+
   function renderFinal() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (tintedPixels1) {
@@ -802,10 +788,13 @@ document.getElementById('color1').addEventListener('change', function() {
       ctx.drawImage(tempCanvas2, 0, 0);
     }
   }
-  </script>
-  
+</script>
+
  
   
 
 </body>
 </html>
+
+
+ 
